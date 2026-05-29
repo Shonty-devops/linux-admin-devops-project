@@ -1,4 +1,4 @@
-# Day 06 - Linux Process Management, Monitoring & Background Job Control
+# Day 07 - Linux Process Management, Monitoring & Background Job Control
 
 ---
 
