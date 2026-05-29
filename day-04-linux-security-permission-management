@@ -1,0 +1,273 @@
+# Day 04 - Linux Security & Permission Management
+
+---
+
+# Introduction
+
+Welcome to Day 04 of the Linux Administration Project.
+
+In real-world Linux environments, securing files, directories, and collaborative workspaces is one of the most important responsibilities of a Linux Administrator and DevOps Engineer.
+
+This lab focuses on implementing Linux security best practices through:
+
+* file permissions
+* ownership management
+* access control
+* collaborative workspace configuration
+* secure project structures
+
+Throughout this challenge, we simulate a production environment where sensitive project resources must be protected while still enabling collaboration among development teams.
+
+---
+
+# Objective
+
+The objective of this lab is to:
+
+* Understand Linux permission models
+* Learn secure file access management
+* Configure ownership properly
+* Implement collaborative directory permissions
+* Use special Linux permissions like setgid
+* Strengthen operational security skills
+
+---
+
+# Skills Covered
+
+* chmod
+* chown
+* setgid permissions
+* directory security
+* ownership management
+* access control
+* collaborative workspace configuration
+
+---
+
+# Project Scenario
+
+Project Phoenix contains highly sensitive infrastructure resources and development files.
+
+As the Linux Administrator responsible for infrastructure security, your task is to:
+
+* protect confidential project assets
+* configure ownership correctly
+* secure team collaboration directories
+* prevent unauthorized access
+* maintain proper permission inheritance
+
+---
+
+# Task 1 - Creating a Secure File
+
+## Problem Statement
+
+Create a confidential file to store sensitive project keys.
+
+The file should only be accessible by its owner.
+
+---
+
+## Commands Used
+
+```bash id="doqq7y"
+touch project_keys.txt
+chmod 600 project_keys.txt
+```
+
+---
+
+## Solution
+
+```bash id="ikdpsp"
+cd ~/project/phoenix_project
+
+touch project_keys.txt
+
+chmod 600 project_keys.txt
+
+ls -l
+```
+
+---
+
+## Output
+
+```bash id="vgkkjt"
+-rw------- 1 labex labex 0 May 25 12:05 project_keys.txt
+```
+
+---
+
+## Explanation
+
+Permission `600` means:
+
+| Permission | Value        |
+| ---------- | ------------ |
+| Owner      | Read + Write |
+| Group      | No Access    |
+| Others     | No Access    |
+
+This ensures that sensitive project files remain protected from unauthorized users.
+
+---
+
+# Task 2 - Ownership Management
+
+## Problem Statement
+
+Transfer ownership of the project resources to the development lead and developers group.
+
+---
+
+## Commands Used
+
+```bash id="7i8krx"
+sudo chown -R dev_lead:developers ~/project/phoenix_project
+```
+
+---
+
+## Solution
+
+```bash id="qgk4wa"
+sudo chown -R dev_lead:developers ~/project/phoenix_project
+
+ls -ld ~/project/phoenix_project
+```
+
+---
+
+## Output
+
+```bash id="j1ub4m"
+drwxrwxr-x 4 dev_lead developers 53 May 25 12:05 phoenix_project
+```
+
+---
+
+## Explanation
+
+The `-R` flag applies ownership changes recursively to:
+
+* files
+* directories
+* subdirectories
+
+This is commonly used in production Linux environments while provisioning application infrastructure.
+
+---
+
+# Task 3 - Securing the Main Directory
+
+## Commands Used
+
+```bash id="t7m37w"
+sudo chmod 750 ~/project/phoenix_project
+```
+
+---
+
+## Permission Breakdown
+
+| User Type | Permissions |
+| --------- | ----------- |
+| Owner     | rwx         |
+| Group     | r-x         |
+| Others    | ---         |
+
+---
+
+## Output
+
+```bash id="avwzxp"
+drwxr-x--- 4 dev_lead developers 53 May 25 12:05 phoenix_project
+```
+
+---
+
+# Task 4 - Configuring setgid Permissions
+
+## Objective
+
+Ensure all newly created files inherit the developers group automatically.
+
+---
+
+## Commands Used
+
+```bash id="xez1lc"
+sudo chmod 2770 ~/project/phoenix_project/src
+```
+
+---
+
+## Output
+
+```bash id="bxxy7v"
+drwxrws--- 2 dev_lead developers 26 May 25 12:43 src
+```
+
+---
+
+## Explanation
+
+The leading `2` in `2770` enables the setgid bit.
+
+Benefits:
+
+* automatic group inheritance
+* improved team collaboration
+* consistent permission structure
+* better operational management
+
+This is widely used in:
+
+* DevOps environments
+* shared repositories
+* deployment directories
+* collaborative infrastructure setups
+
+---
+
+# Key Learnings
+
+Through this lab, I learned:
+
+* Linux permission management
+* secure file handling
+* ownership administration
+* collaborative directory configuration
+* setgid implementation
+* operational Linux security practices
+
+---
+
+# DevOps Relevance
+
+Linux permissions and ownership are critical in:
+
+* CI/CD pipelines
+* shared deployment environments
+* Kubernetes nodes
+* Docker hosts
+* infrastructure automation
+* cloud systems
+
+Understanding Linux security fundamentals is essential before working with advanced DevOps tooling.
+
+---
+
+# Summary
+
+In this lab, I successfully:
+
+* secured sensitive files
+* configured ownership management
+* implemented directory security
+* enabled collaborative group inheritance
+* strengthened Linux administration skills
+
+This exercise improved my understanding of production-style Linux security and operational best practices.
