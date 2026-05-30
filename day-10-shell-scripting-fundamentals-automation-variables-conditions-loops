@@ -1,0 +1,487 @@
+# Day 10 - Shell Scripting Fundamentals: Automation, Variables, Conditions & Loops
+
+---
+
+# Introduction
+
+Welcome, aspiring system administrator!
+
+As a newly hired Junior DevOps Engineer, I was tasked with solving a common production problem: managing a growing collection of application log files that were consuming valuable server storage.
+
+The objective was to build a reusable shell script capable of:
+
+* initializing a log management workflow
+* accepting user input
+* validating directory existence
+* processing log files automatically
+* copying logs into a backup location
+* handling errors gracefully
+
+This challenge introduced several fundamental shell scripting concepts used daily by Linux Administrators, DevOps Engineers, and Automation Specialists.
+
+---
+
+# Objective
+
+The primary goals of this lab were to:
+
+* Create and execute a shell script
+* Work with shell variables
+* Accept user input
+* Implement conditional statements
+* Validate system resources
+* Automate repetitive tasks using loops
+* Copy files programmatically
+* Build a reusable log management utility
+
+---
+
+# Skills Covered
+
+* Shell scripting
+* Linux automation
+* Variables and user input
+* Conditional logic
+* File operations
+* Looping constructs
+* Error handling
+* Linux administration
+
+---
+
+# Linux Commands Used
+
+```bash
+bash
+chmod
+echo
+read
+if
+for
+cp
+exit
+basename
+```
+
+---
+
+# Task 1 - Writing a Simple Shell Script
+
+## Problem Statement
+
+Every automation task begins with a script.
+
+The first objective was to create a shell script that could:
+
+* initialize successfully
+* display a startup message
+* be executable from the terminal
+
+---
+
+# Command Used
+
+```bash
+chmod +x log_manager.sh
+```
+
+---
+
+# Script Content
+
+```bash
+#!/bin/bash
+echo "Log Manager Initialized"
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ ls
+app_logs
+
+labex:project/ $ vi log_manager.sh
+
+labex:project/ $ ls
+app_logs  log_manager.sh
+
+labex:project/ $ sudo chmod +x ~/project/log_manager.sh
+
+labex:project/ $ ./log_manager.sh
+Log Manager Initialized
+```
+
+---
+
+# Command Explanation
+
+| Component     | Purpose                         |
+| ------------- | ------------------------------- |
+| `#!/bin/bash` | Specifies the Bash interpreter  |
+| `echo`        | Displays output to the terminal |
+| `chmod +x`    | Makes the script executable     |
+
+---
+
+# Why This Matters
+
+Shell scripts are the foundation of Linux automation.
+
+They are commonly used for:
+
+* server maintenance
+* deployment automation
+* monitoring tasks
+* backup operations
+* DevOps workflows
+
+---
+
+# Task 2 - Adding Variables and User Input
+
+## Problem Statement
+
+Hardcoded values make scripts difficult to reuse.
+
+The objective was to:
+
+* define variables
+* capture user input
+* display dynamic output
+
+---
+
+# Script Enhancements
+
+```bash
+LOG_DIR="/home/labex/project/app_logs"
+
+echo "Enter the backup filename:"
+read BACKUP_FILENAME
+
+echo "Backing up logs to: $BACKUP_FILENAME"
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ ./log_manager.sh
+
+Log Manager Initialized.
+Enter the backup filename:
+daily_backup
+
+Backing up logs to: daily_backup
+```
+
+---
+
+# Complete Script
+
+```bash
+#!/bin/bash
+
+echo "Log Manager Initialized."
+
+LOG_DIR="/home/labex/project/app_logs"
+
+echo "Enter the backup filename:"
+read BACKUP_FILENAME
+
+echo "Backing up logs to: $BACKUP_FILENAME"
+```
+
+---
+
+# Command Explanation
+
+| Command     | Purpose                    |
+| ----------- | -------------------------- |
+| `LOG_DIR=`  | Stores directory path      |
+| `read`      | Accepts user input         |
+| `$VARIABLE` | References variable values |
+
+---
+
+# Why This Matters
+
+Variables allow scripts to:
+
+* become reusable
+* adapt to different environments
+* reduce hardcoded values
+* improve maintainability
+
+User input makes automation more interactive and flexible.
+
+---
+
+# Task 3 - Implementing Conditional Logic
+
+## Problem Statement
+
+A script should not assume resources always exist.
+
+Before processing files, the script needed to verify:
+
+* the log directory exists
+
+If not, the script should terminate safely.
+
+---
+
+# Conditional Logic Added
+
+```bash
+if [ -d "$LOG_DIR" ]; then
+    echo "Log directory found. Proceeding..."
+else
+    echo "Error: Log directory not found."
+    exit 1
+fi
+```
+
+---
+
+# Command Explanation
+
+| Component | Purpose                               |
+| --------- | ------------------------------------- |
+| `if`      | Starts conditional block              |
+| `-d`      | Checks whether a directory exists     |
+| `exit 1`  | Terminates script with failure status |
+
+---
+
+# Example Success Output
+
+```bash
+Log Manager Initialized.
+
+Log directory found. Proceeding...
+
+Enter the backup filename:
+test_backup
+
+Backing up logs to: test_backup
+```
+
+---
+
+# Example Failure Output
+
+```bash
+Log Manager Initialized.
+
+Error: Log directory not found.
+```
+
+---
+
+# Why This Matters
+
+Error handling prevents:
+
+* unexpected failures
+* invalid operations
+* corrupted workflows
+* wasted execution time
+
+This is critical in production automation.
+
+---
+
+# Task 4 - Looping Through File Operations
+
+## Problem Statement
+
+Manually copying multiple log files is inefficient.
+
+The objective was to:
+
+* iterate through all `.log` files
+* copy them automatically
+* report progress to the user
+
+---
+
+# Creating Backup Directory
+
+```bash
+mkdir ~/project/backups
+```
+
+---
+
+# Loop Implementation
+
+```bash
+for file in "$LOG_DIR"/*.log
+do
+    cp "$file" ~/project/backups
+    echo "Copied $(basename "$file")"
+done
+```
+
+---
+
+# Final Script
+
+```bash
+#!/bin/bash
+
+echo "Log Manager Initialized."
+
+LOG_DIR="/home/labex/project/app_logs"
+
+if [ -d "$LOG_DIR" ]; then
+
+    echo "Enter the backup filename: "
+    read BACKUP_FILENAME
+
+    echo "Backing up logs to: $BACKUP_FILENAME"
+
+    for file in "$LOG_DIR"/*.log
+    do
+        cp "$file" ~/project/backups
+        echo "Copied $(basename "$file")"
+    done
+
+else
+    echo "Error: Log directory not found."
+    exit 1
+
+fi
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ cat log_manager.sh
+```
+
+```bash
+#!/bin/bash
+
+echo "Log Manager Initialized."
+
+LOG_DIR="/home/labex/project/app_logs"
+
+if [ -d "$LOG_DIR" ]; then
+
+     echo "Enter the backup filename: "
+     read BACKUP_FILENAME
+
+     echo "Backing up logs to: $BACKUP_FILENAME"
+
+     for file in "$LOG_DIR"/*.log
+     do
+
+         cp "$file" ~/project/backups
+         echo "Copied $(basename "$file")"
+
+     done
+
+else
+    echo "Error: Log directory not found."
+    exit 1
+
+fi
+```
+
+---
+
+# Example Output
+
+```bash
+labex:project/ $ ./log_manager.sh
+
+Log Manager Initialized.
+
+Enter the backup filename:
+daily_backup
+
+Backing up logs to: daily_backup
+
+Copied access.log
+Copied debug.log
+Copied error.log
+
+Backup complete.
+```
+
+---
+
+# Command Explanation
+
+| Command    | Purpose                |
+| ---------- | ---------------------- |
+| `for`      | Creates a loop         |
+| `*.log`    | Matches all log files  |
+| `cp`       | Copies files           |
+| `basename` | Extracts filename only |
+
+---
+
+# Why This Matters
+
+Loops eliminate repetitive manual work.
+
+They are widely used for:
+
+* file management
+* deployment automation
+* monitoring scripts
+* backup operations
+* DevOps workflows
+
+---
+
+# Key Learnings
+
+Through this lab, I learned how to:
+
+* create executable shell scripts
+* use variables effectively
+* capture user input
+* implement conditional logic
+* validate directory existence
+* automate file operations
+* use loops for repetitive tasks
+* perform basic error handling
+
+---
+
+# DevOps & Infrastructure Relevance
+
+The concepts practiced in this lab are highly relevant to:
+
+* Linux System Administration
+* DevOps Engineering
+* Cloud Operations
+* Infrastructure Automation
+* CI/CD Pipelines
+* Monitoring Systems
+* Backup Management
+* Production Support
+
+---
+
+# Summary
+
+In this lab, I successfully:
+
+* created a shell script from scratch
+* implemented variables and user input
+* added directory validation checks
+* handled execution failures gracefully
+* automated file processing using loops
+* copied application log files into a backup directory
+
+This exercise strengthened my understanding of shell scripting fundamentals and demonstrated how automation can simplify repetitive administrative tasks in real-world Linux and DevOps environments.
