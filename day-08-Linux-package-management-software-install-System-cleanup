@@ -1,0 +1,464 @@
+# Day 08 - Linux Package Management, Software Installation & System Cleanup
+
+---
+
+# Introduction
+
+A newly assigned development server at LabEx Corporation had become difficult to manage due to inconsistent software installations, outdated package repositories, and unnecessary packages left behind by previous development projects.
+
+As the acting Software Steward, the objective was to:
+
+* update package repositories
+* install required software packages
+* verify software installation details
+* remove obsolete applications
+* clean unused dependencies
+* maintain system health and efficiency
+
+This lab simulated real-world Linux package management scenarios commonly encountered in:
+
+* Linux production servers
+* DevOps environments
+* cloud infrastructure
+* software deployment systems
+* server maintenance operations
+
+---
+
+# Objective
+
+The primary goals of this lab were to:
+
+* Update Linux package repositories
+* Install new software packages
+* Verify installed package information
+* Remove obsolete software
+* Clean unused dependencies
+* Maintain system stability and efficiency
+
+---
+
+# Skills Covered
+
+* Linux package management
+* Software installation
+* Package verification
+* Software removal
+* Dependency cleanup
+* Linux administration
+* System maintenance
+* DevOps operational management
+
+---
+
+# Linux Commands Used
+
+```bash
+apt update
+apt install
+apt show
+apt remove
+apt autoremove
+sudo
+```
+
+---
+
+# Task 1 - Updating System Package Repositories
+
+## Problem Statement
+
+Before installing any software, it is important to ensure the package manager has the latest information available from configured repositories.
+
+An outdated package database may cause:
+
+* installation failures
+* outdated software deployments
+* security vulnerabilities
+
+The objective was to synchronize the local package index with remote package repositories.
+
+---
+
+# Command Used
+
+```bash
+sudo apt update
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ sudo apt update
+```
+
+---
+
+# Example Output
+
+```bash
+Hit:1 http://mirrors.cloud.aliyuncs.com/ubuntu jammy InRelease
+Hit:2 http://mirrors.cloud.aliyuncs.com/ubuntu jammy-updates InRelease
+Hit:3 http://mirrors.cloud.aliyuncs.com/ubuntu jammy-backports InRelease
+Hit:4 http://mirrors.cloud.aliyuncs.com/ubuntu jammy-security InRelease
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+
+360 packages can be upgraded.
+```
+
+---
+
+# Command Explanation
+
+| Component | Purpose                                        |
+| --------- | ---------------------------------------------- |
+| `apt`     | Debian package management utility              |
+| `update`  | Refresh local package repository information   |
+| `sudo`    | Execute command with administrative privileges |
+
+---
+
+# Why This Matters
+
+The `apt update` command is the first step before:
+
+* installing software
+* upgrading packages
+* patching security vulnerabilities
+* maintaining Linux servers
+
+It is heavily used in:
+
+* DevOps workflows
+* cloud environments
+* Linux administration
+* CI/CD automation pipelines
+
+---
+
+# Task 2 - Installing Essential Software Packages
+
+## Problem Statement
+
+The development team requested installation of:
+
+* `neofetch`
+
+This utility provides a quick overview of system information in an easy-to-read format.
+
+The objective was to install the package using the Linux package manager.
+
+---
+
+# Command Used
+
+```bash
+sudo apt install neofetch
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ sudo apt install neofetch
+```
+
+---
+
+# Installation Verification
+
+```bash
+neofetch
+```
+
+---
+
+# Command Explanation
+
+| Component     | Purpose                   |
+| ------------- | ------------------------- |
+| `apt install` | Install software packages |
+| `neofetch`    | Package being installed   |
+| `sudo`        | Administrative access     |
+
+---
+
+# Why This Matters
+
+Software installation is a routine task performed by:
+
+* Linux Administrators
+* DevOps Engineers
+* Cloud Engineers
+* System Engineers
+
+Understanding package installation is essential for maintaining production servers.
+
+---
+
+# Task 3 - Verifying Installed Package Versions
+
+## Problem Statement
+
+After installation, it is important to verify:
+
+* package installation status
+* installed version
+* package metadata
+* repository source
+
+The objective was to inspect package details for `neofetch`.
+
+---
+
+# Command Used
+
+```bash
+sudo apt show neofetch
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ sudo apt show neofetch
+```
+
+---
+
+# Example Output
+
+```bash
+Package: neofetch
+Version: 7.1.0-3
+Priority: optional
+Section: universe/utils
+Installed-Size: 359 kB
+Homepage: https://github.com/dylanaraps/neofetch
+Description: Shows Linux System Information with Distribution Logo
+```
+
+---
+
+# Key Information Identified
+
+Package name:
+
+* `neofetch`
+
+Installed version:
+
+* `7.1.0-3`
+
+Installation status:
+
+* Installed successfully
+
+---
+
+# Why This Matters
+
+Package verification is useful for:
+
+* troubleshooting
+* auditing software versions
+* documentation
+* dependency management
+
+This is a common requirement in:
+
+* production environments
+* compliance audits
+* DevOps operations
+* software lifecycle management
+
+---
+
+# Task 4 - Removing Unnecessary Software Packages
+
+## Problem Statement
+
+An obsolete package named:
+
+* `figlet`
+
+was discovered on the server.
+
+Unused software can:
+
+* consume storage
+* increase maintenance effort
+* introduce unnecessary security risks
+
+The objective was to remove the package safely.
+
+---
+
+# Command Used
+
+```bash
+sudo apt remove figlet
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ sudo apt remove figlet
+```
+
+---
+
+# Example Output
+
+```bash
+The following packages will be REMOVED:
+  figlet
+
+After this operation, 752 kB disk space will be freed.
+```
+
+---
+
+# Why This Matters
+
+Removing unused software helps:
+
+* reduce attack surface
+* improve maintainability
+* conserve storage space
+* simplify system administration
+
+This is considered a best practice in production Linux environments.
+
+---
+
+# Task 5 - Cleaning Unused Dependencies
+
+## Problem Statement
+
+After uninstalling software, Linux may leave behind dependency packages that are no longer required.
+
+These unused packages:
+
+* consume disk space
+* clutter the system
+* provide no operational value
+
+The objective was to remove orphaned dependencies.
+
+---
+
+# Command Used
+
+```bash
+sudo apt autoremove
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ sudo apt autoremove
+```
+
+---
+
+# Example Output
+
+```bash
+The following packages will be REMOVED:
+
+gir1.2-libxfce4util-1.0
+gir1.2-xfconf-0
+gsfonts-x11
+libdbus-glib-1-2
+libgdk-pixbuf-xlib-2.0-0
+libjpeg-turbo-progs
+miscfiles
+xscreensaver-data
+
+After this operation, 5641 kB disk space will be freed.
+```
+
+---
+
+# Command Explanation
+
+| Component        | Purpose                    |
+| ---------------- | -------------------------- |
+| `apt autoremove` | Remove unused dependencies |
+| `sudo`           | Administrative privileges  |
+
+---
+
+# Why This Matters
+
+Dependency cleanup is important because it:
+
+* frees storage space
+* improves system efficiency
+* reduces software clutter
+* simplifies maintenance
+
+This is commonly performed during:
+
+* server maintenance
+* package upgrades
+* software lifecycle management
+* DevOps infrastructure operations
+
+---
+
+# Key Learnings
+
+Through this lab, I learned how to:
+
+* update package repositories
+* install Linux software packages
+* verify package versions
+* inspect package metadata
+* remove obsolete software
+* clean orphaned dependencies
+* maintain system health
+* perform package management operations
+
+---
+
+# DevOps & Infrastructure Relevance
+
+The concepts practiced in this lab are highly relevant to:
+
+* Linux System Administration
+* DevOps Engineering
+* Cloud Infrastructure
+* Site Reliability Engineering (SRE)
+* CI/CD Pipelines
+* Configuration Management
+* Infrastructure Maintenance
+* Production Support
+
+---
+
+# Summary
+
+In this lab, I successfully:
+
+* updated Linux package repositories
+* installed the neofetch package
+* verified software installation details
+* inspected package metadata
+* removed an obsolete package
+* cleaned unused dependencies
+* maintained overall system hygiene
+
+This exercise strengthened my understanding of Linux package management and software lifecycle operations commonly performed in real-world DevOps, cloud, and production infrastructure environments.
