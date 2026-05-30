@@ -1,0 +1,489 @@
+# Day 09 - Linux Backup, Recovery & Backup Automation
+
+---
+
+# Introduction
+
+A minor power surge caused a temporary server glitch on the main application server. Although no critical data was lost, the incident exposed a significant weakness in the organization's backup and recovery strategy.
+
+As the newly appointed **Backup Sentinel**, the objective was to:
+
+* identify critical application data
+* create compressed backup archives
+* verify backup integrity
+* restore files from backups
+* automate backup creation
+* implement a reliable recovery process
+
+This lab simulated real-world backup administration tasks commonly encountered in:
+
+* Linux production servers
+* DevOps environments
+* cloud infrastructure
+* disaster recovery planning
+* business continuity operations
+
+---
+
+# Objective
+
+The primary goals of this lab were to:
+
+* Identify critical data requiring backup
+* Create compressed backup archives
+* Verify backup contents and integrity
+* Restore deleted files from backups
+* Automate backup creation using cron
+* Implement a basic disaster recovery workflow
+
+---
+
+# Skills Covered
+
+* Linux backup management
+* Archive creation
+* Data recovery
+* Backup verification
+* Task automation
+* Cron scheduling
+* Linux system administration
+* Disaster recovery operations
+
+---
+
+# Linux Commands Used
+
+```bash
+tar
+echo
+cat
+ls
+rm
+cron
+crontab
+date
+```
+
+---
+
+# Task 1 - Identifying Critical Data for Backup
+
+## Problem Statement
+
+Before creating a backup strategy, it was necessary to determine which application resources were critical.
+
+The important directories identified were:
+
+* data
+* config
+* logs
+
+To simplify future backup operations, a manifest file was created containing the backup targets.
+
+---
+
+# Commands Used
+
+```bash
+echo
+cat
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ echo config > backup-list.txt
+labex:project/ $ echo data >> backup-list.txt
+labex:project/ $ echo logs >> backup-list.txt
+```
+
+---
+
+# Backup Manifest Verification
+
+```bash
+labex:project/ $ cat backup-list.txt
+
+config
+data
+logs
+```
+
+---
+
+# Why This Matters
+
+Maintaining a backup manifest provides:
+
+* consistent backup scope
+* simplified automation
+* easier backup maintenance
+* improved disaster recovery planning
+
+This approach is commonly used in:
+
+* production environments
+* enterprise backup systems
+* DevOps automation workflows
+
+---
+
+# Task 2 - Creating a Full System Backup Archive
+
+## Problem Statement
+
+After identifying the critical directories, the next objective was to create a compressed backup archive.
+
+The backup needed to:
+
+* include all critical directories
+* use gzip compression
+* be stored in the backups directory
+
+---
+
+# Command Used
+
+```bash
+tar -czvf backups/system-backup.tar.gz -T backup-list.txt
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ tar -czvf backups/system-backup.tar.gz -T backup-list.txt
+```
+
+---
+
+# Command Breakdown
+
+| Option | Purpose                       |
+| ------ | ----------------------------- |
+| `-c`   | Create archive                |
+| `-z`   | Compress using gzip           |
+| `-v`   | Verbose output                |
+| `-f`   | Specify archive filename      |
+| `-T`   | Read backup targets from file |
+
+---
+
+# Example Output
+
+```bash
+config/
+config/app.conf
+data/
+data/transactions.csv
+logs/
+logs/app.log
+```
+
+---
+
+# Backup Verification
+
+```bash
+labex:project/ $ ls -lh backups/
+```
+
+Output:
+
+```bash
+-rw-rw-r-- 1 labex labex 443 May 28 13:00 system-backup.tar.gz
+```
+
+---
+
+# Why This Matters
+
+The `tar` utility is one of the most important Linux backup tools for:
+
+* backup creation
+* disaster recovery
+* migration projects
+* system snapshots
+
+It remains widely used across:
+
+* Linux servers
+* cloud environments
+* container platforms
+* DevOps pipelines
+
+---
+
+# Task 3 - Verifying Backup Integrity
+
+## Problem Statement
+
+A backup is only valuable if it is readable and contains the expected files.
+
+The objective was to verify archive contents without extracting the files.
+
+---
+
+# Command Used
+
+```bash
+tar -tzvf backups/system-backup.tar.gz > backup-contents.txt
+```
+
+---
+
+# Solution
+
+```bash
+labex:project/ $ tar -tzvf backups/system-backup.tar.gz > backup-contents.txt
+```
+
+---
+
+# Verification File Created
+
+```bash
+backup-contents.txt
+```
+
+---
+
+# Example Archive Contents
+
+```bash
+config/
+config/app.conf
+data/
+data/transactions.csv
+logs/
+logs/app.log
+```
+
+---
+
+# Command Breakdown
+
+| Option | Purpose               |
+| ------ | --------------------- |
+| `-t`   | List archive contents |
+| `-z`   | Read gzip archive     |
+| `-v`   | Verbose listing       |
+| `-f`   | Specify archive file  |
+
+---
+
+# Why This Matters
+
+Backup verification helps ensure:
+
+* archive integrity
+* successful recovery capability
+* complete backups
+* compliance requirements
+
+Verification is considered a best practice in:
+
+* enterprise backup systems
+* cloud recovery strategies
+* production operations
+
+---
+
+# Task 4 - Restoring Files from a Backup
+
+## Problem Statement
+
+A critical application configuration file was accidentally deleted:
+
+* `config/app.conf`
+
+The application became unavailable, requiring immediate recovery.
+
+The objective was to restore only the missing file without extracting the entire archive.
+
+---
+
+# Initial Attempt
+
+```bash
+tar -xzf backups/system-backup.tar.gz -C ~/project config/app.conf
+```
+
+---
+
+# Error Encountered
+
+```bash
+tar (child): backups/system-backup.tar.gz: Cannot open: No such file or directory
+```
+
+---
+
+# Why the Error Happened
+
+The command was executed from:
+
+```bash
+~/project/backups
+```
+
+The archive path referenced was incorrect relative to the current working directory.
+
+---
+
+# Correct Working Solution
+
+```bash
+tar -xzf system-backup.tar.gz -C ~/project config/app.conf
+```
+
+---
+
+# File Restoration Verification
+
+```bash
+ls -l ~/project/config/app.conf
+```
+
+Output:
+
+```bash
+-rw-rw-r-- 1 labex labex 72 May 28 12:45 /home/labex/project/config/app.conf
+```
+
+---
+
+# Configuration Verification
+
+```bash
+cat ~/project/config/app.conf
+```
+
+Output:
+
+```bash
+DATABASE_URL=postgres://user:pass@host:5432/dbname
+API_KEY=ABCDEFG12345
+```
+
+---
+
+# Why This Matters
+
+Selective file restoration is critical during:
+
+* accidental deletions
+* configuration loss
+* recovery operations
+* production incidents
+
+This minimizes downtime and reduces recovery effort.
+
+---
+
+# Task 5 - Scheduling Automated Backups
+
+## Problem Statement
+
+Manual backups are unreliable and prone to human error.
+
+The objective was to automate backup creation using Linux cron scheduling.
+
+Requirements included:
+
+* execution every minute
+* timestamped archive names
+* compressed backups
+* absolute file paths
+
+---
+
+# Command Used
+
+```bash
+crontab -e
+```
+
+---
+
+# Cron Job Configuration
+
+```bash
+* * * * * tar -czf /home/labex/project/backups/backup-$(date +\%Y-\%m-\%d_\%H-\%M-\%S).tar.gz -C /home/labex/project data config logs
+```
+
+---
+
+# Command Breakdown
+
+| Component   | Purpose                           |
+| ----------- | --------------------------------- |
+| `* * * * *` | Run every minute                  |
+| `tar -czf`  | Create compressed archive         |
+| `date`      | Generate timestamp                |
+| `-C`        | Change directory before archiving |
+
+---
+
+# Why This Matters
+
+Automated backups provide:
+
+* consistent protection
+* reduced human error
+* improved recovery readiness
+* compliance support
+
+Cron-based backup scheduling is frequently used for:
+
+* application backups
+* database exports
+* server snapshots
+* disaster recovery plans
+
+---
+
+# Key Learnings
+
+Through this lab, I learned how to:
+
+* identify critical application data
+* create compressed backup archives
+* verify backup integrity
+* restore individual files from backups
+* troubleshoot archive extraction issues
+* automate backup creation using cron
+* implement basic disaster recovery procedures
+
+---
+
+# DevOps & Infrastructure Relevance
+
+The concepts practiced in this lab are highly relevant to:
+
+* Linux System Administration
+* DevOps Engineering
+* Site Reliability Engineering (SRE)
+* Cloud Infrastructure
+* Disaster Recovery Planning
+* Backup Administration
+* Business Continuity Operations
+* Production Support
+
+---
+
+# Summary
+
+In this lab, I successfully:
+
+* identified critical backup targets
+* created compressed backup archives
+* verified archive integrity
+* restored deleted configuration files
+* automated backup creation with cron
+* implemented a foundational disaster recovery strategy
+
+This exercise strengthened my understanding of Linux backup administration, recovery operations, and automation practices used in real-world production and DevOps environments.
